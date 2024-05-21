@@ -14,4 +14,5 @@ if __name__ == "__main__":
         )
         if es_client.ping(error_trace=False):
             logging.info("The connection is established")
-            break
+            if es_client.count(index="movies", params={"format": "json"})["count"] == 999:
+                break
