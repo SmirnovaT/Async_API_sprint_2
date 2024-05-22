@@ -10,7 +10,7 @@ from src.models.person import Person
 from src.services.film import FilmService, get_film_service
 from src.utils.pagination import Paginator
 
-router = APIRouter()
+router = APIRouter(tags=["films"])
 
 
 class Film(BaseModel):
@@ -29,7 +29,6 @@ class Film(BaseModel):
     response_model=Film,
     summary="Полная информация по фильму",
     description="Получение информации о фильме по его id",
-    tags=["films"]
 )
 async def film_details(
     film_id: str, film_service: FilmService = Depends(get_film_service)
@@ -62,7 +61,6 @@ class Films(BaseModel):
     response_model=list[Films],
     summary="Получение всех фильмов",
     description="Получение информации по всем фильмам сервиса",
-    tags=["films"]
 )
 async def films(
     genre: uuid.UUID = None,
@@ -80,7 +78,6 @@ async def films(
     response_model=list[FilmBase],
     summary="Похожие фильмы (с такими же жанрами)",
     description="Получение информации о похожих фильмах",
-    tags=["films"]
 )
 async def similar_films(
     film_id: str, film_service: FilmService = Depends(get_film_service)
@@ -97,7 +94,6 @@ async def similar_films(
     response_model=list[Films],
     summary="Полнотекстовый поиск фильмов",
     description="Получение информации по фильмам посредством полнотекстового поиска",
-    tags=["films"]
 )
 async def search_film(
     search: str,

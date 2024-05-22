@@ -8,7 +8,7 @@ from src.models.person import PersonWithFilms
 from src.services.person import PersonService, get_person_service
 from src.utils.pagination import Paginator
 
-router = APIRouter()
+router = APIRouter(tags=["persons"])
 
 
 class PersonFilm(BaseModel):
@@ -33,7 +33,6 @@ class Person(BaseModel):
     response_model=list[Person],
     summary="Полнотекстовый поиск по персонам",
     description="Получение информации по персонам посредством полнотекстового поиска",
-    tags=["persons"]
 )
 async def person_search(
     query: str,
@@ -58,7 +57,6 @@ async def person_search(
     response_model=Person,
     summary="Получение персоны по ее uuid",
     description="Возвращает данные о персоне по id",
-    tags=["persons"]
 )
 async def person(
     person_id: str, person_service: PersonService = Depends(get_person_service)
@@ -78,7 +76,6 @@ async def person(
     response_model=list[PersonFilmWithRating],
     summary="Получение фильмов персоны по ее uuid",
     description="Возвращает фильмы по id персоны",
-    tags=["persons"]
 )
 async def person_films(
     person_id: str, person_service: PersonService = Depends(get_person_service)
