@@ -19,7 +19,8 @@ class Genre(BaseModel):
     "/",
     response_model=list[Genre],
     summary="Получение всех жанров",
-    description="Возвращает список всех жанров",
+    description="Получение информации по всем жанрам сервиса",
+    tags=["genres"]
 )
 async def genres(
     paginated_params: Paginator = Depends(),
@@ -41,6 +42,7 @@ async def genres(
     response_model=Genre,
     summary="Получение жанра по его uuid",
     description="Возвращает информацию по заданному жанру",
+    tags=["genres"]
 )
 async def genre(
     genre_uuid: str, genre_service: GenreService = Depends(get_genre_service)

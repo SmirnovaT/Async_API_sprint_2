@@ -10,6 +10,7 @@ from src.api.v1 import films, genres, persons
 from src.core.config import config
 from src.db import elastic
 from src.db import cache
+from src.docs.swagger_description import tags
 
 
 @asynccontextmanager
@@ -24,10 +25,19 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
+    version="1.0.0",
     title=config.project_name,
+    summary="Async API for online cinema",
+    description="Entry point for clients to search for cinema content",
     docs_url="/api/openapi",
     openapi_url="/api/openapi.json",
+    openapi_tags=tags,
     default_response_class=ORJSONResponse,
+    swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"},
+    contact={
+        "name": "Amazing python team",
+        "email": "amazaingpythonteam@fake.com",
+    },
     lifespan=lifespan,
 )
 

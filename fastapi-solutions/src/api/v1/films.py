@@ -24,7 +24,13 @@ class Film(BaseModel):
     directors: list[Person]
 
 
-@router.get("/{film_id}", response_model=Film, summary="Полная информация по фильму")
+@router.get(
+    "/{film_id}",
+    response_model=Film,
+    summary="Полная информация по фильму",
+    description="Получение информации о фильме по его id",
+    tags=["films"]
+)
 async def film_details(
     film_id: str, film_service: FilmService = Depends(get_film_service)
 ) -> Film:
@@ -51,7 +57,13 @@ class Films(BaseModel):
     imdb_rating: float | None
 
 
-@router.get("/", response_model=list[Films], summary="Получение всех фильмов")
+@router.get(
+    "/",
+    response_model=list[Films],
+    summary="Получение всех фильмов",
+    description="Получение информации по всем фильмам сервиса",
+    tags=["films"]
+)
 async def films(
     genre: uuid.UUID = None,
     sort: str = "-imdb_rating",
@@ -67,6 +79,8 @@ async def films(
     "/{film_id}/similar",
     response_model=list[FilmBase],
     summary="Похожие фильмы (с такими же жанрами)",
+    description="Получение информации о похожих фильмах",
+    tags=["films"]
 )
 async def similar_films(
     film_id: str, film_service: FilmService = Depends(get_film_service)
@@ -79,7 +93,11 @@ async def similar_films(
 
 
 @router.get(
-    "/search/", response_model=list[Films], summary="Полнотекстовый поиск фильмов"
+    "/search/",
+    response_model=list[Films],
+    summary="Полнотекстовый поиск фильмов",
+    description="Получение информации по фильмам посредством полнотекстового поиска",
+    tags=["films"]
 )
 async def search_film(
     search: str,
@@ -94,5 +112,5 @@ async def search_film(
     else:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
-            detail=f"Не найдено ни одного фильма",
+            detail="Не найдено ни одного фильма",
         )
