@@ -10,6 +10,7 @@ from src.api.v1 import films, genres, persons
 from src.core.config import config
 from src.db import elastic
 from src.db import cache
+from src.docs.swagger_description import tags
 
 
 @asynccontextmanager
@@ -24,17 +25,26 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
+    version="1.0.0",
     title=config.project_name,
+    summary="Async API for online cinema",
+    description="Entry point for clients to search for cinema content",
     docs_url="/api/openapi",
     openapi_url="/api/openapi.json",
+    openapi_tags=tags,
     default_response_class=ORJSONResponse,
+    swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"},
+    contact={
+        "name": "Amazing python team",
+        "email": "amazaingpythonteam@fake.com",
+    },
     lifespan=lifespan,
 )
 
 
-app.include_router(films.router, prefix="/api/v1/films", tags=["films"])
-app.include_router(genres.router, prefix="/api/v1/genres", tags=["genres"])
-app.include_router(persons.router, prefix="/api/v1/persons", tags=["persons"])
+app.include_router(films.router, prefix="/api/v1/films")
+app.include_router(genres.router, prefix="/api/v1/genres")
+app.include_router(persons.router, prefix="/api/v1/persons")
 
 if __name__ == "__main__":
     uvicorn.run(

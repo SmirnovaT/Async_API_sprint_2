@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from src.services.genre import GenreService, get_genre_service
 from src.utils.pagination import Paginator
 
-router = APIRouter()
+router = APIRouter(tags=["genres"])
 
 
 class Genre(BaseModel):
@@ -19,7 +19,7 @@ class Genre(BaseModel):
     "/",
     response_model=list[Genre],
     summary="Получение всех жанров",
-    description="Возвращает список всех жанров",
+    description="Получение информации по всем жанрам сервиса",
 )
 async def genres(
     paginated_params: Paginator = Depends(),

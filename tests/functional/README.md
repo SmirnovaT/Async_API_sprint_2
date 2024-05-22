@@ -2,6 +2,8 @@
 
 #### Асинхронный API для кинотеатра
 
+[ССЫЛКА НА РЕПОЗИТОРИЙ](https://github.com/SmirnovaT/Async_API_sprint_2)
+
 ____________________________________________________________________________
 Как запустить проект и проверить его работу
 ____________________________________________________________________________
@@ -9,6 +11,10 @@ ____________________________________________________________________________
 Необходимо заполнить .env по шаблону .env_example
 
 Запуск приложения с docker compose
+```
+cd tests/functional
+cp .env_test_example .env
+```
 ```
 docker-compose up --build
 or
@@ -20,19 +26,35 @@ ____________________________________________________________________________
 ```
 1. cd fastapi-solutions
 
-2. python3.12 -m venv venv
+2. cp .env_example .env
 
-3. source venv/bin/activate
+3. python3.12 -m venv venv
 
-4. pip3 install poetry
+4. source venv/bin/activate
 
-5. poetry install (or python -m poetry install)
+5. pip3 install poetry
 
-6. docker run -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" krissmelikova/awesome_repository:v1
+6. poetry install (or python -m poetry install)
 
-7. docker run -p 6379:6379 redis:7.2.4-alpine
+7. docker run -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" krissmelikova/awesome_repository:v1
+
+8. docker run -p 6379:6379 redis:7.2.4-alpine
  
-8. gunicorn src.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+9. gunicorn src.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+
+10. cd tests/functional
+
+11. cp .env_test_example .env
+
+12. python3.12 -m venv venv
+
+13. source venv/bin/activate
+
+14. pip3 install poetry
+
+15. poetry install (or python -m poetry install)
+
+16. python3 -m pytest
 ```
 
 ____________________________________________________________________________
