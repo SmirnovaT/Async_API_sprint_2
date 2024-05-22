@@ -4,7 +4,6 @@ import pytest
 
 from testdata.mapping import Person
 
-# весь файл с тестами запустится в асинхронном режиме
 pytestmark = pytest.mark.asyncio
 
 ENDPOINT = "persons"

@@ -4,7 +4,6 @@ import pytest
 
 from testdata.genres.genres_data import genres_paginated_data
 
-# весь файл с тестами запустится в асинхронном режиме
 pytestmark = pytest.mark.asyncio
 
 ENDPOINT = "genres"
