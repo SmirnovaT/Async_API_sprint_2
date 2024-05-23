@@ -17,8 +17,6 @@ async def wait_for_ok(service_url):
                 break
 
 
-
 service_url = "http://service:8000/api/v1/films/"
 loop = asyncio.new_event_loop()
 loop.run_until_complete(wait_for_ok(service_url))
-

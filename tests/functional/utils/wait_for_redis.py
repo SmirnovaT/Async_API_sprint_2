@@ -6,8 +6,9 @@ from redis import Redis
 from redis.exceptions import ConnectionError
 
 
-@backoff.on_exception(backoff.expo,
-                      (ConnectionError, ConnectionRefusedError), max_tries=20)
+@backoff.on_exception(
+    backoff.expo, (ConnectionError, ConnectionRefusedError), max_tries=20
+)
 def ping_redis(redis_client):
     redis_client.ping()
 
