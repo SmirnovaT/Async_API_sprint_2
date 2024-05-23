@@ -45,6 +45,10 @@ class AsyncCacheService(BaseAsyncCacheService):
         self.cache = cache
         self.index = index
 
+    # Данный метод уже реализует функционал по созданию структурированного ключа,
+    # который генерируется на основе индекса, наименования и значения аргументов
+    # из запроса пользователя.
+    # Пример такого ключа: persons::movie::Fountain::uuid::h1hg3h42f4jh3f
     async def cache_key_generation(self, **kwargs) -> str:
         """Генерация ключа для кеширования"""
 
