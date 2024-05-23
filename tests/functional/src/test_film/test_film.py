@@ -2,6 +2,8 @@ import json
 
 import pytest
 
+from http import HTTPStatus
+
 from testdata.films.films_all_data import all_films
 from testdata.films.film_full_info_data import full_info_film
 from testdata.films.films_similar_data import similar_films
@@ -16,7 +18,7 @@ FIlMS_PAGE_SIZE = 10
 async def test_get_all_films_success(clean_cache, make_get_request):
     status, response = await make_get_request(endpoint=ENDPOINT)
 
-    assert status == 200
+    assert status == HTTPStatus.OK
     assert len(response) == FIlMS_PAGE_SIZE
     assert response == all_films
 
@@ -28,7 +30,7 @@ async def test_get_film_by_id_success(clean_cache, make_get_request):
         endpoint=f"{ENDPOINT}/{test_film_id}",
     )
 
-    assert status == 200
+    assert status == HTTPStatus.OK
     for key, value in full_info_film.items():
         assert response_w_film.get(key) == value
 
@@ -40,7 +42,7 @@ async def test_get_film_not_found(clean_cache, make_get_request):
         endpoint=f"{ENDPOINT}/{test_film_id}",
     )
 
-    assert status == 404
+    assert status == HTTPStatus.NOT_FOUND
 
 
 async def test_compare_result_from_elastic_and_redis(
@@ -82,7 +84,7 @@ async def test_film_pagination(clean_cache, make_get_request):
 
     status, response = await make_get_request(endpoint=ENDPOINT, params=params)
 
-    assert status == 200
+    assert status == HTTPStatus.OK
     assert len(response) == params["page_size"]
 
 
@@ -94,7 +96,7 @@ async def test_film_pagination_page_number_error(make_get_request):
 
     status, response = await make_get_request(endpoint=ENDPOINT, params=params)
 
-    assert status == 422
+    assert status == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response["detail"][0]["msg"] == "Input should be greater than or equal to 1"
 
 
@@ -106,7 +108,7 @@ async def test_film_pagination_page_size_error(make_get_request):
 
     status, response = await make_get_request(endpoint=ENDPOINT, params=params)
 
-    assert status == 422
+    assert status == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response["detail"][0]["msg"] == "Input should be less than or equal to 100"
 
 
@@ -117,5 +119,5 @@ async def test_get_similar_films_by_id_success(clean_cache, make_get_request):
         endpoint=f"{ENDPOINT}/{test_film_id}/similar",
     )
 
-    assert status == 200
+    assert status == HTTPStatus.OK
     assert response_w_film == similar_films
