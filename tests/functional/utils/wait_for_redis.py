@@ -1,16 +1,17 @@
 import time
 import logging
 
+import backoff
 from redis import Redis
 from redis.exceptions import ConnectionError
 
+
+@backoff.on_exception(backoff.expo,
+                      (ConnectionError, ConnectionRefusedError), max_tries=20)
+def ping_redis(redis_client):
+    redis_client.ping()
+
+
 if __name__ == "__main__":
     redis_client = Redis(host="cache", port=6379)
-    while True:
-        logging.info("Pinging redis")
-        try:
-            if redis_client.ping():
-                break
-        except (ConnectionError, ConnectionRefusedError) as e:
-            logging.error("Failed to connect to redis...")
-        time.sleep(1)
+    ping_redis(redis_client)
