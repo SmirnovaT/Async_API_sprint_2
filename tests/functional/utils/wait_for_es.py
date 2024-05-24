@@ -4,6 +4,8 @@ import backoff
 from elasticsearch import Elasticsearch
 from elastic_transport import ConnectionError
 
+from exceptions import EmptyIndexError
+
 
 @backoff.on_exception(
     backoff.expo, (ConnectionError, ConnectionRefusedError), max_tries=1000
@@ -13,8 +15,8 @@ def ping_elastic(es_client):
     if es_client.ping(error_trace=False):
         logging.info("The connection is established")
         if es_client.count(index="movies")["count"] == 0:
-            raise ConnectionRefusedError
-        logging.error("Elastic search successfully connected")
+            raise EmptyIndexError("Index 'movies' is empty")
+        logging.info("Elastic search successfully connected")
 
 
 if __name__ == "__main__":
