@@ -2,6 +2,8 @@ import aiohttp
 import asyncio
 import time
 
+from http import HTTPStatus
+
 
 async def get_status(service_url, client):
     raw_response = await client.get(service_url)
@@ -13,7 +15,7 @@ async def wait_for_ok(service_url):
         for _ in range(100):
             time.sleep(10)
             status = await get_status(service_url, client)
-            if status == 200:
+            if status == HTTPStatus.OK:
                 break
 
 

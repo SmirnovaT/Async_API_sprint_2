@@ -2,6 +2,8 @@ import json
 
 import pytest
 
+from http import HTTPStatus
+
 from testdata.genres.genres_data import genres_paginated_data
 
 pytestmark = pytest.mark.asyncio
@@ -13,7 +15,7 @@ GENRES_PAGE_SIZE = 10
 async def test_get_all_genres_success(clean_cache, make_get_request):
     status, response = await make_get_request(endpoint=ENDPOINT)
 
-    assert status == 200
+    assert status == HTTPStatus.OK
     assert len(response) == GENRES_PAGE_SIZE
     assert response == genres_paginated_data
 
@@ -25,7 +27,7 @@ async def test_get_genre_by_id_success(clean_cache, make_get_request):
         endpoint=ENDPOINT + "/{genre_id}" + f"?genre_uuid={test_genre_id}",
     )
 
-    assert status == 200
+    assert status == HTTPStatus.OK
     assert response_w_genre["uuid"] == test_genre_id
     assert response_w_genre["name"] == "Sci-Fi"
 
@@ -37,7 +39,7 @@ async def test_get_genre_not_found(clean_cache, make_get_request):
         endpoint=ENDPOINT + "/{genre_id}" + f"?genre_uuid={test_genre_id}",
     )
 
-    assert status == 404
+    assert status == HTTPStatus.NOT_FOUND
 
 
 async def test_compare_result_from_elastic_and_redis(
@@ -78,7 +80,7 @@ async def test_genre_pagination(clean_cache, make_get_request):
 
     status, response = await make_get_request(endpoint=ENDPOINT, params=params)
 
-    assert status == 200
+    assert status == HTTPStatus.OK
     assert len(response) == params["page_size"]
 
 
@@ -90,7 +92,7 @@ async def test_genre_pagination_page_number_error(make_get_request):
 
     status, response = await make_get_request(endpoint=ENDPOINT, params=params)
 
-    assert status == 422
+    assert status == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response["detail"][0]["msg"] == "Input should be greater than or equal to 1"
 
 
@@ -102,5 +104,5 @@ async def test_genre_pagination_page_size_error(make_get_request):
 
     status, response = await make_get_request(endpoint=ENDPOINT, params=params)
 
-    assert status == 422
+    assert status == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response["detail"][0]["msg"] == "Input should be less than or equal to 100"
