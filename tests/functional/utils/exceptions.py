@@ -1,2 +1,7 @@
 class EmptyIndexError(Exception):
-    pass
+    def __init__(self, index, message):
+        self.index = index
+        self.message = message
+
+    def __str__(self):
+        return f'{self.index}: {self.message}'

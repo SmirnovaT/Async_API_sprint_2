@@ -8,14 +8,15 @@ from exceptions import EmptyIndexError
 
 
 @backoff.on_exception(
-    backoff.expo, (ConnectionError, ConnectionRefusedError), max_tries=1000
+    backoff.expo, (ConnectionError, ConnectionRefusedError, EmptyIndexError), max_tries=1000
 )
 def ping_elastic(es_client):
     logging.info("Pinging Elastic")
     if es_client.ping(error_trace=False):
         logging.info("The connection is established")
-        if es_client.count(index="movies")["count"] == 0:
-            raise EmptyIndexError("Index 'movies' is empty")
+        index = "movies"
+        if es_client.count(index=index)["count"] == 0:
+            raise EmptyIndexError(index, "Index is empty")
         logging.info("Elastic search successfully connected")
 
 
