@@ -16,7 +16,7 @@ def ping_elastic(es_client):
         logging.info("The connection is established")
         index = "movies"
         if es_client.count(index=index)["count"] == 0:
-            raise EmptyIndexError(index, "Index is empty")
+            raise EmptyIndexError(index)
         logging.info("Elastic search successfully connected")
 
 
